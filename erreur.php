@@ -8,6 +8,6 @@
 			<title>login</title>
 		</head>
 		<body>
-			<p>Erreur php</p>
+			<a href="index.php">Retourner sur la page index.php</a>
 		</body>
 	</html>

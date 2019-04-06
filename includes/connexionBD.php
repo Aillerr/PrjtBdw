@@ -4,50 +4,55 @@
 
 */
 
-	function traiterRequete ($chaine) {
+	function traiterRequete ($req) {
 		$mdp = "" ;
-		$machine = "127.0.0.1" ; // machine locale
+		$machine = "localhost" ; // machine locale
 		$bd = "prjtbdw" ;
-		$connexion = mysqli_connect($machine,$user,$mdp, $bd) ;
-		if(mysqli_connect_errno()) // erreur si > 0 
-		printf("Échec de la connexion : " ,mysqli_connect_error()); 
-		else { // utilisation de la base 
+		$user="root";
+		$connexion = mysqli_connect($machine,$user,$mdp, $bd);
+		if(mysqli_connect_errno()) {// erreur si > 0 
+		printf("Échec de la connexion : " ,mysqli_connect_error() ); 
+		}else //printf("Connexion ok");
+		echo "</br>";
 
-		}
-
-
-		$req=$chaine;
 		$tableauRetourne = array();
 		$resultat = mysqli_query($connexion, $req);
-		if($resultat == FALSE) // échec si FALSE 
+		if($resultat == false) // échec si FALSE 
 		printf("Échec de la requête"); 
-		else {  // collecte des métadonnées 
-			$finfo = mysqli_fetch_fields($resultats);  
+		else {  // collecte des métadonnées
+			//printf("Requête effectuée");
+			//echo "</br>";
+			$finfo = mysqli_fetch_fields($resultat);  
 			$entete=array() ;     
-			foreach ($finfo as $val) {         
-				$entete($val->name);     
+			foreach ($finfo as $key => $value) {  
+				       
+				$entete[$key]=$value->name;
+
 			}  
+			
 			$tableauRetourne[0]=$entete;  
 			$cpt=1 ; 
-			while ($ligne = mysqli_fetch_array($resultat)) { 
-				$tableauRetourne[cpt++]= $ligne; 
+			while ($ligne = mysqli_fetch_array($resultat, MYSQLI_ASSOC)) { 
+				$tableauRetourne[$cpt++]= $ligne; 
 			} 
 		}
 
-	mysqli_close($connexion);
+
+		mysqli_close($connexion);
+		return $tableauRetourne;
 
 	}
 
 
 	function Array2Table ($tableauRetourne) {
-		$leTableau = ‘<table>’; 
-		for($tableauRetourne as $tuple) {  
-			$leTableau .=’<tr>’;  
-			for($tuple as $attribut) {   
-				$leTableau .= ‘<td>’ . $attribut . ‘</td>’;  
-			}  $leTableau .=’</tr>’; 
- 		} $leTableau = ‘</table>’; 
- 		echo $leTableau 	
+		$leTableau = "<table>"; 
+		foreach($tableauRetourne as $tuple) {  
+			$leTableau .="<tr>";  
+			foreach($tuple as $attribut) {   
+				$leTableau .= "<td>" .$attribut . "</td>";  
+			}  $leTableau .="</tr>"; 
+ 		} $leTableau .= "</table>";
+ 		echo $leTableau; 
+ 		return $leTableau; 	
 	}
-
 ?>
