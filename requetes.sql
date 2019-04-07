@@ -22,3 +22,7 @@ SELECT Nom, Prenom FROM adherent WHERE Pseudo LIKE "' . $_POST['pLogin'] .'"
 /*Retourne toutes les informations stockées sur l'adhérent dont le login a été utilisé pour se connecter*/
 
 SELECT * FROM adherent WHERE Pseudo LIKE "' . $_POST['pLogin'] .'"
+
+/*Retourne le type de l'utilisateur*/
+
+SELECT type FROM adherent WHERE Pseudo LIKE "' . $_POST['pLogin'] .'"
