@@ -17,13 +17,17 @@
 
 		$tableauRetourne = array();
 		$resultat = mysqli_query($connexion, $req);
+		var_dump($resultat);
 		if($resultat == false) // échec si FALSE 
 		printf("Échec de la requête"); 
-		else {  // collecte des métadonnées
+		
+		else/*if (gettype($resultat[0]) != "boolean")*/ {  // collecte des métadonnées
 			//printf("Requête effectuée");
 			//echo "</br>";
+			var_dump($resultat);
 			$finfo = mysqli_fetch_fields($resultat);  
-			$entete=array() ;     
+			$entete=array() ; 
+
 			foreach ($finfo as $key => $value) {  
 				       
 				$entete[$key]=$value->name;
@@ -34,12 +38,13 @@
 			$cpt=1 ; 
 			while ($ligne = mysqli_fetch_array($resultat, MYSQLI_ASSOC)) { 
 				$tableauRetourne[$cpt++]= $ligne; 
+				return $tableauRetourne;
 			} 
 		}
 
 
 		mysqli_close($connexion);
-		return $tableauRetourne;
+		
 
 	}
 

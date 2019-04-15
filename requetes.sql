@@ -26,3 +26,7 @@ SELECT * FROM adherent WHERE Pseudo LIKE "' . $_POST['pLogin'] .'"
 /*Retourne le type de l'utilisateur*/
 
 SELECT type FROM adherent WHERE Pseudo LIKE "' . $_POST['pLogin'] .'"
+
+/*Met à jour la table courses d'un IdC précisé pour un certain attribut*/
+
+UPDATE course SET '.$_POST["modifsend"]." = ".$_POST["nveau"]. ' WHERE IdC = '.$_POST["amodif"]

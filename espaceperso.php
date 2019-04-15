@@ -1,4 +1,3 @@
-
 <?php session_start() ; ?>
 <!DOCTYPE html>
 	<html>
@@ -16,10 +15,11 @@
 				}
 
 				if  (empty($_POST['pLogin']) || empty( $_POST['pPwd'])) {
-     				header('Location: erreur.php');
+    				header('Location: erreur.php');
 				}
 				$_SESSION["slogin"]= $_POST['pLogin']; 
 				$_SESSION["sPwd"]= $_POST['pPwd'];
+
 
 
 				$p='SELECT Pseudo, Pwd FROM adherent WHERE Pseudo LIKE "' . $_POST['pLogin'] . '" AND Pwd LIKE "' . $_POST['pPwd'] . '"';
@@ -49,11 +49,12 @@
 				echo "</div></br>";*/
 
 				if ($tab_type[1]['type']=='1') {
-					if (!isset($_POST['page'])) {
+					if (!isset($_POST['nom'])) {
 						printf("Accueil admin");
 						init_accueil();
-					}else printf("admin"); //fonctions de $_POST['page'] admin
-				}elseif (!isset($_POST['page'])) {
+					}else header('Location: adm/'.$_POST["nom"].'.php');
+
+				}elseif (!isset($_POST['nom'])) {
 					printf("Accueil adh");
 					//fonctions de accueil adherent
 				}else printf("adh");//fonctions de $_POST['page'] adherent
