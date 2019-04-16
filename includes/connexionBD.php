@@ -17,14 +17,14 @@
 
 		$tableauRetourne = array();
 		$resultat = mysqli_query($connexion, $req);
-		var_dump($resultat);
+		$tabeleau=explode(" ", $req);
 		if($resultat == false) // échec si FALSE 
-		printf("Échec de la requête"); 
-		
-		else/*if (gettype($resultat[0]) != "boolean")*/ {  // collecte des métadonnées
+		printf("Échec de la requête"); 	
+		elseif($tabeleau[0]=="SELECT") {  // collecte des métadonnées
 			//printf("Requête effectuée");
 			//echo "</br>";
-			var_dump($resultat);
+			
+
 			$finfo = mysqli_fetch_fields($resultat);  
 			$entete=array() ; 
 
@@ -38,11 +38,12 @@
 			$cpt=1 ; 
 			while ($ligne = mysqli_fetch_array($resultat, MYSQLI_ASSOC)) { 
 				$tableauRetourne[$cpt++]= $ligne; 
-				return $tableauRetourne;
+
 			} 
+			return $tableauRetourne;
 		}
 
-
+		
 		mysqli_close($connexion);
 		
 

@@ -104,6 +104,7 @@
 				switch ($_POST['action_wanted']) {
 					case 'add':
 						echo "<form method='POST' action='adherents.php'>
+								<input type='text' name='id_add' placeholder='ID de l adherent'> Champ obligatoire<br>
 								<input type='text' name='name_add' placeholder='Nom de l adherent'> Champ obligatoire<br>
 								<input type='text' name='prn_add' placeholder='Prénom de l adherent'> Champ obligatoire<br>
 								<input type='text' name='year_add' placeholder='Année de naissance'><br>
@@ -138,7 +139,8 @@
 				traiterRequete($p_adh);
 				break;
 			case 1 :
-				$p_adh= "INSERT INTO adherent (IdA, Nom, Prenom, Date_naissance, Sexe, Adresse, Date_dernier_justif, Club, Pseudo, Pwd, Type) VALUES ('2', '".$_POST['name_add']."', '".$_POST['prn_add']."', '".$_POST['year_add']."', '".$_POST['sexe_add']."', '".$_POST['adr_add']."', '".$_POST['justif_add']."', '".$_POST['club_add']."', '".$_POST['pseudo_add']."', '".$_POST['pwd_add']."', '0'";
+				$p_adh= "INSERT INTO adherent (IdA, Nom, Prenom, Date_naissance, Sexe, Adresse, Date_dernier_justif, Club, Pseudo, Pwd, Type) VALUES ('".$_POST['id_add']."', '".$_POST['name_add']."', '".$_POST['prn_add']."', '".$_POST['year_add']."', '".$_POST['sexe_add']."', '".$_POST['adr_add']."', '".$_POST['justif_add']."', '".$_POST['club_add']."', '".$_POST['pseudo_add']."', '".$_POST['pwd_add']."', '0')";
+				echo $p_adh;
 				traiterRequete($p_adh);
 				break;
 			case -1:

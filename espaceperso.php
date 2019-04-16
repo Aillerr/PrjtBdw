@@ -36,11 +36,11 @@
 		<body>			 
 			<?php
 				$p_titre='SELECT Nom, Prenom FROM adherent WHERE Pseudo LIKE "' . $_POST['pLogin'] .'"';
-				$p_infos='SELECT * FROM adherent WHERE Pseudo LIKE "' . $_POST['pLogin'] .'"';
+				//$p_infos='SELECT * FROM adherent WHERE Pseudo LIKE "' . $_POST['pLogin'] .'"';
 				$p_type='SELECT type FROM adherent WHERE Pseudo LIKE "' . $_POST['pLogin'] .'"';
 
 				$tab=traiterRequete($p_titre);
-				$tab_infos=traiterRequete($p_infos);
+				//$tab_infos=traiterRequete($p_infos);
 				$tab_type=traiterRequete($p_type);
 
 				echo "<h1>Espace perso de " . $tab[1]["Nom"] . " " . $tab[1]["Prenom"] . "</h1></br>";

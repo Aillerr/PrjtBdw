@@ -29,4 +29,23 @@ SELECT type FROM adherent WHERE Pseudo LIKE "' . $_POST['pLogin'] .'"
 
 /*Met à jour la table courses d'un IdC précisé pour un certain attribut*/
 
-UPDATE course SET '.$_POST["modifsend"]." = ".$_POST["nveau"]. ' WHERE IdC = '.$_POST["amodif"]
+UPDATE course SET $_POST["modifsend"]. " = " .$_POST["nveau"]. ' WHERE IdC = '.$_POST["amodif"]
+
+/*Ajoute un adh*/
+
+INSERT INTO adherent (IdA, Nom, Prenom, Date_naissance, Sexe, Adresse, Date_dernier_justif, Club, Pseudo, Pwd, Type) VALUES ('".$_POST['id_add']."', '".$_POST['name_add']."', '".$_POST['prn_add']."', '".$_POST['year_add']."', '".$_POST['sexe_add']."', '".$_POST['adr_add']."', '".$_POST['justif_add']."', '".$_POST['club_add']."', '".$_POST['pseudo_add']."', '".$_POST['pwd_add']."', '0')
+
+/*Supprime un adh*/
+
+DELETE FROM adherent WHERE IdA LIKE '".$_POST['id_del']."'
+
+
+
+
+
+
+
+
+
+
+
