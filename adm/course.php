@@ -3,35 +3,19 @@
 	<html>
 		<head>
 			<meta charset="utf-8">
-			<link rel="stylesheet" type="text/css" href="css/.css">
+			<link rel="stylesheet" type="text/css" href="../css/style_eperso.css">
 			<?php 
 				
-				require_once('../includes/connexionBD.php');
+				require_once('fonctions_adm.php');
 
 			?>
 			<title>Accueil</title>
 		</head>
 		<body>
 			<?php
-				echo "<form method='POST' action='course.php'>
-						<input type='text' name='amodif' placeholder='Entrez la course à modifier'/>
-						<input type='text' name='nveau' placeholder='Entrez la modification'/>
-						<select name='attribut'	size='1'>
-							<option>Nom
-							<option>Annee_creation
-							<option>Epreuves
-							<option>Mois
-						</select>
-						<input type='submit' name='modifsend' />
-					</form>";
-
-				if (isset($_POST["modifsend"]) && !empty($_POST["nveau"]) && !empty($_POST["amodif"]) && isset($_POST['attribut'])) {
-					$p_m='UPDATE course SET '.$_POST["modifsend"]." = ".$_POST["nveau"]. ' WHERE IdC = '.$_POST["amodif"];
-				
-					traiterRequete($p_m);
-				}else echo "Tous les champs doivent être renseignés";
-				 echo '<a href="retouracc.php">Retour Accueil</a>';
+				crse();
+				retour_acc();
 			?>
-			
+			<a href="../logout.php">Déconnexion</a>
 		</body>
 	</html>

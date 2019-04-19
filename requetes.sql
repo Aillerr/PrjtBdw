@@ -11,6 +11,9 @@ GRANT SELECT ON edition TO adherent
 GRANT SELECT ON resultat TO adherent 
 GRANT SELECT ON temps_passage TO adherent
 
+
+/* CONNEXION */
+
 /* Retourne le pseudo et le pwd d'un adhérent*/
 
 SELECT Pseudo, Pwd FROM adherent WHERE Pseudo LIKE "' . $_POST['pLogin'] . '" AND Pwd LIKE "' . $_POST['pPwd'] . '"
@@ -27,9 +30,28 @@ SELECT * FROM adherent WHERE Pseudo LIKE "' . $_POST['pLogin'] .'"
 
 SELECT type FROM adherent WHERE Pseudo LIKE "' . $_POST['pLogin'] .'"
 
+
+
+/* COURSES */
+
 /*Met à jour la table courses d'un IdC précisé pour un certain attribut*/
 
 UPDATE course SET $_POST["modifsend"]. " = " .$_POST["nveau"]. ' WHERE IdC = '.$_POST["amodif"]
+
+/*Ajoute une course*/
+
+INSERT INTO course (IdC, Nom, Annee_creation, Epreuves, Mois) VALUES ('".$id."', '".$_POST['name_add']."', '".$_POST['year_add']."', '".$_POST['epreuve_add']."', '".$_POST['mois_add']."')
+
+/*Supprime une course*/
+
+DELETE FROM course WHERE IdC LIKE '".$_POST['id_del']."'
+
+/*Renvoie l'IdC le plus haut*/
+
+SELECT MAX(IdC) FROM course
+
+
+/* ADHERENT */
 
 /*Ajoute un adh*/
 
@@ -39,12 +61,17 @@ INSERT INTO adherent (IdA, Nom, Prenom, Date_naissance, Sexe, Adresse, Date_dern
 
 DELETE FROM adherent WHERE IdA LIKE '".$_POST['id_del']."'
 
+/*Met à jour un adhérent d'un IdA précisé pour un certaine attribut*/
+
+UPDATE adherent SET ".$_POST['attribut']." = '".$_POST['nveau']. "' WHERE IdA LIKE ".$_POST['id_correct']
+" 
 
 
+/* RESULTATS */
 
+/*Sélectionne tous les résultats*/
 
-
-
+SELECT * FROM resultat
 
 
 
