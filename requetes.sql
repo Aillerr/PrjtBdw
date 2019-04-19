@@ -76,3 +76,68 @@ SELECT * FROM resultat
 
 
 
+/*Visualisation de la liste de toutes les courses*/
+SELECT DISTINCT *
+FROM course
+
+/*Visualisation de la liste de toutes les courses et de leurs édition */
+SELECT C.Nom,E.*
+FROM edition E, course C
+WHERE E.IdC=C.IdC
+GROUP BY C.Nom
+
+/*Je ne suis pas sure de celle là*/
+SELECT AVG(SELECT COUNT (R.Dossard) FROM edition E, epreuve F, resultat R,
+WHERE E.IdE = F.IdE AND E.IdE=R.IdE 
+GROUP BY E.IdE)
+
+
+SELECT AVG(SELECT COUNT (R.Dossard) FROM edition E, epreuve F, resultat R,
+WHERE E.IdE = F.IdE AND E.IdE=R.IdE 
+GROUP BY E.IdC)
+
+/*Le nombre total d'adhérent ayant couru l'édition*/
+SELECT E.IdC COUNT (R.Dossard) FROM edition E, epreuve F, resultat R,
+WHERE E.IdE = F.IdE AND E.IdE=R.IdE 
+GROUP BY E.IdE)
+
+/*Le nombre d'adhérents ayant couru l'édition en tant que licencié dans un club d'athlétisme*/
+
+SELECT E.IdC COUNT (R.Dossard) FROM adherent A, edition E, epreuve F, resultat R,
+WHERE E.IdE = F.IdE AND E.IdE=R.IdE AND R.nom=A.nom AND A.club IS NOT NULL
+GROUP BY E.IdE)
+
+/*Le nombre de club d'athlétisme représentés durant l'édition de la course*/
+
+SELECT  COUNT (DISTINCT A.club) FROM adherent A, edition E, epreuve F, resultat R,
+WHERE E.IdE = F.IdE AND E.IdE=R.IdE AND R.nom=A.nom AND A.club IS NOT NULL
+GROUP BY E.IdE)
+
+/*Le temps du vainqueur de l'édition*/
+SELECT T.temps
+FROM temps_passage T, resultat R
+WHERE R.rang='1' AND R.dossard=T.dossard 
+
+
+/* le meilleur et le pire rang/temps obtenu par un adhérent de l'association*/
+
+/*Le nombre d'abandon d'adhérents de l'associaition*/
+SELECT COUNT(A.nom) 
+FROM adhrent A, resultat R
+WHERE A.nom=R.nom AND R.rang IS NULL
+GROUP BY A.club
+
+/*trier par nom*/
+SELECT R.nom R.prenom
+FROM resultat R, edition E 
+WHERE E.IdE=R.IdE 
+ORDER BY R.nom, R.prenom
+
+/*trier par rang*/
+SELECT R.nom R.prenom
+FROM resultat R, edition E 
+WHERE E.IdE=R.IdE 
+ORDER BY R.rang
+
+
+
