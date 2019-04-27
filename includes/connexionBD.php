@@ -49,16 +49,26 @@
 
 	}
 
+	function Array2Table ($tb) {
+		echo "<table><thead>"; 
+		foreach ($tb[0] as $head) {
+			echo "<th>$head</th>";
+		}
+		echo "</thead><tbody>";
 
-	function Array2Table ($tableauRetourne) {
-		$leTableau = "<table>"; 
-		foreach($tableauRetourne as $tuple) {  
-			$leTableau .="<tr>";  
-			foreach($tuple as $attribut) {   
-				$leTableau .= "<td>" .$attribut . "</td>";  
-			}  $leTableau .="</tr>"; 
- 		} $leTableau .= "</table>";
- 		echo $leTableau; 
- 		return $leTableau; 	
+		for($i=1; $i < count($tb); $i++) {
+			if ($i%2 == 0)
+				$classCss = "class='p'";
+			else
+				$classCss = "class='i'";
+
+			echo "<tr $classCss>";
+			foreach ($tb[$i] as $v) {
+				echo "<td>$v</td>";
+			}
+			echo "</tr>";
+		}
+
+ 		echo "</tbody></table>";
 	}
 ?>

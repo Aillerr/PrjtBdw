@@ -1,19 +1,54 @@
 <?php
 
-	require_once('../includes/connexionBD.php');
+	require_once('./includes/connexionBD.php');
 
 	function retour_acc() {
 
-		 echo '<a href="retouracc.php">Retour Accueil</a>';
+		 echo '<a href="../retouracc.php">Retour Accueil</a>';
 	}
 
 
 
 	/* COURSES.PHP*/
 
+	function crses () {
+				echo "<h2>Ajouter/Supprimer une course</h2>";
+				if (isset($_POST['send_del']) || isset($_POST['send_add'])) {
+					if (isset($_POST['send_del']) && !empty($_POST['id_del'])) {
+						$choix=0;
+					}elseif (isset($_POST['send_add']) && !empty($_POST['name_add']))  {
+						$choix=1;
+					}else echo "Champ manquant";
+				}
+				form_courses();
+				if (isset($choix) && ($choix==1 || $choix==0 )) {
+					req_courses($choix);
+				}
+
+				$p_c='SELECT * FROM course';
+				$tab=traiterRequete($p_c);
+				Array2Table($tab);
+				echo "<br><h2>Ajouter/Supprimer une édition de course</h2>";
+				if (isset($_POST['send_del_edt']) || isset($_POST['send_add_edt'])) {
+					if (isset($_POST['send_del_edt']) && !empty($_POST['id_del_edt'])) {
+						$choix=2;
+					}elseif (isset($_POST['send_add_edt']) && !empty($_POST['idc_add_edt']))  {
+						$choix=3;
+					}else echo "Champ manquant";
+				}
+				form_edt();
+				if (isset($choix) && ($choix==2 || $choix==3)) {
+					req_courses($choix);
+				}
+				
+				$p_edt="SELECT * FROM edition";
+				$tab_edt=traiterRequete($p_edt);
+				Array2Table($tab_edt);				
+	}
+
 	function form_courses() {
-		echo "<form method='POST' action='courses.php'>
-				<input type='radio' name='action_wanted' value='add' checked> Ajouter une course<br>
+		echo "<form method='POST' action='espaceperso.php'>
+				<input type='radio' name='action_wanted' value='add' checked > Ajouter une course<br>
 				<input type='radio' name='action_wanted' value='del'> Supprimer une course<br>
 				<input type='submit' name='send' value='Choisir'> 
 			</form>";
@@ -21,17 +56,17 @@
 				switch ($_POST['action_wanted']) {
 					case 'add':
 						echo "<form method='POST' action='courses.php'>
-								<input type='text' name='name_add' placeholder='Nom de la course'> Champ obligatoire<br>
-								<input type='text' name='year_add' placeholder='Année de création'><br>
-								<input type='text' name='epreuve_add' placeholder='Epreuves'><br>
-								<input type='text' name='mois_add' placeholder='Mois de la course'><br>
+								<input type='text' name='name_add' placeholder='Nom de la course' required=''><br>
+								<input type='text' name='year_add' placeholder='Année de création' required=''><br>
+								<input type='text' name='epreuve_add' placeholder='Epreuves' required=''><br>
+								<input type='text' name='mois_add' placeholder='Mois de la course' required=''><br>
 								<input type='submit' name='send_add' value='Ajouter'><br>
 							</form>";
 						break;
 						
 					case 'del':
 						echo "<form method='POST' action='courses.php'>
-								<input type='text' name='id_del' placeholder='ID de la course à enlever'> Champ obligatoire<br>
+								<input type='text' name='id_del' placeholder='ID de la course à enlever' required=''><br>
 								<input type='submit' name='send_del' value='Ajouter'><br>
 							</form>";
 						break;
@@ -52,23 +87,23 @@
 				switch ($_POST['action_wanted']) {
 					case 'add_edt':
 						echo "<form method='POST' action='courses.php'>
-								<input type='text' name='idc_add_edt' placeholder='Numéro de la course'> Champ obligatoire<br>
-								<input type='text' name='year_add_edt' placeholder='Année de l édition'><br>
-								<input type='text' name='nbpart_add_edt' placeholder='Nombre de participants'><br>
-								<input type='text' name='plan_add_edt' placeholder='Plan de l édition'><br>
-								<input type='text' name='adep_add_edt' placeholder='Adresse de départ de l édition'><br>
-								<input type='text' name='dati_add_edt' placeholder='Date lim inscriptions de l édition'><br>
-								<input type='text' name='datd_add_edt' placeholder='Date lim dépôt de l édition'><br>
-								<input type='text' name='datr_add_edt' placeholder='Date récupération dossard de l édition'><br>
-								<input type='text' name='site_add_edt' placeholder='Site de l édition'><br>
-								<input type='text' name='tarif_add_edt' placeholder='Tarifs de l édition'><br>
+								<input type='text' name='idc_add_edt' placeholder='Numéro de la course' required=''><br>
+								<input type='text' name='year_add_edt' placeholder='Année de l édition' required=''><br>
+								<input type='text' name='nbpart_add_edt' placeholder='Nombre de participants' required=''><br>
+								<input type='text' name='plan_add_edt' placeholder='Plan de l édition' required=''><br>
+								<input type='text' name='adep_add_edt' placeholder='Adresse de départ de l édition' required=''><br>
+								<input type='text' name='dati_add_edt' placeholder='Date lim inscriptions de l édition' required=''><br>
+								<input type='text' name='datd_add_edt' placeholder='Date lim dépôt de l édition' required=''><br>
+								<input type='text' name='datr_add_edt' placeholder='Date récupération dossard de l édition' required=''><br>
+								<input type='text' name='site_add_edt' placeholder='Site de l édition' required=''><br>
+								<input type='text' name='tarif_add_edt' placeholder='Tarifs de l édition' required=''><br>
 								<input type='submit' name='send_add_edt' value='Ajouter'><br>
 							</form>";
 						break;
 						
 					case 'del_edt':
 						echo "<form method='POST' action='courses.php'>
-								<input type='text' name='id_del_edt' placeholder='ID de l édition à enlever'> Champ obligatoire<br>
+								<input type='text' name='id_del_edt' placeholder='ID de l édition à enlever' required=''><br>
 								<input type='submit' name='send_del_edt' value='Ajouter'><br>
 							</form>";
 						break;
@@ -124,7 +159,7 @@
 
 	function form_res() {
 		echo "<form method='POST' action='resultats.php'>
-				<input type='text' name='idcheck' placeholder='Numéro de l édition choisie'> Champ obligatoire<br>
+				<input type='text' name='idcheck' placeholder='Numéro de l édition choisie' required=''><br>
 				<input type='submit' name='send'>
 			</form>";
 		edition();
@@ -155,20 +190,21 @@
 	/*ADHERENTS.PHP*/
 
 	function adhe() {
-		$p_res="SELECT * FROM adherent";
-		$tab_res=traiterRequete($p_res);
+		
 		if (isset($_POST['send_del']) || isset($_POST['send_add'])) {
 			if (isset($_POST['send_del']) && !empty($_POST['id_del'])) {
 				$choix=0;
 			}elseif (isset($_POST['send_add']) && !empty($_POST['name_add']))  {
 				$choix=1;
 			}else echo "Champ manquant";
-		}else form_adh();
+		} 
+		form_adh();
 		if (isset($choix) && ($choix==1 || $choix==0)) {
 			req_adh($choix);
 		}
 
-		
+		$p_res="SELECT * FROM adherent";
+		$tab_res=traiterRequete($p_res);
 		Array2Table($tab_res);
 	}
 
@@ -182,23 +218,22 @@
 				switch ($_POST['action_wanted']) {
 					case 'add':
 						echo "<form method='POST' action='adherents.php'>
-								<input type='text' name='id_add' placeholder='ID de l adherent'> Champ obligatoire<br>
-								<input type='text' name='name_add' placeholder='Nom de l adherent'> Champ obligatoire<br>
-								<input type='text' name='prn_add' placeholder='Prénom de l adherent'> Champ obligatoire<br>
-								<input type='text' name='year_add' placeholder='Année de naissance'><br>
-								<input type='text' name='sexe_add' placeholder='Sexe'> H ou F<br>
-								<input type='text' name='adr_add' placeholder='Adresse'><br>
-								<input type='text' name='justif_add' placeholder='Dernier justif valide'><br>
-								<input type='text' name='club_add' placeholder='Club'><br>
-								<input type='text' name='pseudo_add' placeholder='Psd'><br>
-								<input type='text' name='pwd_add' placeholder='Pwd'><br>
-								<input type='submit' name='send_add' value='Ajouter'><br>
+								<input type='text' name='id_add' placeholder='ID de l adherent' required=''><br>
+								<input type='text' name='name_add' placeholder='Nom de l adherent' required=''><br>
+								<input type='text' name='prn_add' placeholder='Prénom de l adherent' required=''><br>
+								<input type='text' name='year_add' placeholder='Année de naissance' required=''><br>
+								<input type='text' name='sexe_add' placeholder='Sexe' required=''> H ou F<br>
+								<input type='text' name='adr_add' placeholder='Adresse' required=''><br>
+								<input type='text' name='justif_add' placeholder='Dernier justif valide' required=''><br>
+								<input type='text' name='club_add' placeholder='Club' required=''><br>
+								<input type='text' name='pwd_add' placeholder='Pwd' required=''><br>
+								<input type='submit' name='send_add' value='Ajouter' required=''><br>
 							</form>";
 						break;
 						
 					case 'del':
 						echo "<form method='POST' action='adherents.php'>
-								<input type='text' name='id_del' placeholder='ID de l adherent à enlever'> Champ obligatoire<br>
+								<input type='text' name='id_del' placeholder='ID de l adherent à enlever' required=''><br>
 								<input type='submit' name='send_del' value='Ajouter'><br>
 							</form>";
 						break;
@@ -216,7 +251,7 @@
 				traiterRequete($p_adh);
 				break;
 			case 1 :
-				$p_adh= "INSERT INTO adherent (IdA, Nom, Prenom, Date_naissance, Sexe, Adresse, Date_dernier_justif, Club, Pseudo, Pwd, Type) VALUES ('".$_POST['id_add']."', '".$_POST['name_add']."', '".$_POST['prn_add']."', '".$_POST['year_add']."', '".$_POST['sexe_add']."', '".$_POST['adr_add']."', '".$_POST['justif_add']."', '".$_POST['club_add']."', '".$_POST['pseudo_add']."', '".$_POST['pwd_add']."', '0')";
+				$p_adh= "INSERT INTO adherent (IdA, Nom, Prenom, Date_naissance, Sexe, Adresse, Date_dernier_justif, Club, Pwd, Type) VALUES ('".$_POST['id_add']."', '".$_POST['name_add']."', '".$_POST['prn_add']."', '".$_POST['year_add']."', '".$_POST['sexe_add']."', '".$_POST['adr_add']."', '".$_POST['justif_add']."', '".$_POST['club_add']."', '".$_POST['pwd_add']."', '0')";
 				
 				traiterRequete($p_adh);
 				break;
@@ -240,7 +275,7 @@
 
 	function modif() {
 		echo "<form method='POST' action='adherent.php'>
-						<input type='text' name='id_correct' placeholder='ID de l adherent à selectionner'> Champ obligatoire<br>
+						<input type='text' name='id_correct' placeholder='ID de l adherent à selectionner' required=''><br>
 						<input type='text' name='nveau' placeholder='Entrez la modification'/>
 						<select name='attribut'	size='1'>
 							<option>Nom
@@ -250,7 +285,6 @@
 							<option>Adresse
 							<option>Date_dernier_justif
 							<option>Club
-							<option>Pseudo
 							<option>Pwd
 							<option>Type
 						</select>
@@ -316,7 +350,50 @@
 						</select>
 						<input type='submit' name='editmodifsend' />
 					</form>";
-		
+	}
+
+
+
+	/*IMPORT.PHP*/
+
+	function imp() {
+		echo "<h1>Import</h1>";
+		if (isset($_POST['subm_file'])) {
+			check_file();
+		}else form_imp();
+	}
+
+	function form_imp () {
+		echo "<form method='POST' action'import.php' enctype='mulitpart/form-data'>
+				<input type='hidden' name='max_file_size' value='20000'>
+				<input type='file' name='res_imp' >
+				<input type='submit' name='subm_file'>
+			</form>";
+	}
+
+	function check_file() {
+	if( isset($_POST['res_imp']) ) // si formulaire soumis
+	{
+    	$content_dir = 'res_imp/'; // dossier où sera déplacé le fichier
+
+    	$tmp_file = $_FILES['res_imp']['tmp_name'];
+
+    	if( !is_uploaded_file($tmp_file) )
+    	{	
+        	exit("Le fichier est introuvable");
+    	}
+	}
+		$handle=fopen($_FILES['res_imp']['name'], "r");
+		/*//Créer un dossier 'fichiers/1/'
+ 		 mkdir('fichier/1/', 0777, true);
+ 
+		//Créer un identifiant difficile à deviner
+ 		$nom = md5(uniqid(rand(), true));
+
+
+		$nom = "avatars/{$id_membre}.{$extension_upload}";
+		$resultat = move_uploaded_file($_FILES['icone']['tmp_name'],$nom);
+		if ($resultat) echo "Transfert réussi";*/
 
 	}
 ?>
