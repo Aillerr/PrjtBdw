@@ -3,10 +3,13 @@
 	
 	function init_accueil_adh()
 	{
+		//Si on a envoyé le formulaire
 		if (isset($_POST['envoi'])) {
 
 			$p_idk='SELECT * FROM adherent WHERE Identifiant LIKE "'.$_SESSION["slogin"].'" AND pwd LIKE "'.$_SESSION["sPwd"].'"';
 			$tab_idk=traiterRequete($p_idk);
+
+			//Si on a pas modifié les informations suivantes, elles restent telles qu'elles
 			if (empty($_POST['newadresse'])) {
 				$_POST['newadresse']=$tab_idk[1]['Adresse'];
 			}
@@ -19,16 +22,23 @@
 			if (empty($_POST['newclub'])) {
 				$_POST['newclub']=$tab_idk[1]['Club'];
 			}
+
+			//On met à jour la fiche de l'adhérent
 			$p='UPDATE adherent SET nom="'.$_POST['newnom'].'", prenom="'.$_POST['newprenom'].'", sexe="'.$_POST['newsexe'].'", adresse="'.$_POST['newadresse'].'", Date_naissance="'.$_POST['newdate'].'", dateCertif="'.$_POST['newcertif'].'", club="'.$_POST['newclub'].'" WHERE Identifiant LIKE "'.$_SESSION["slogin"].'"';
 			echo $p;
 			traiterRequete($p);
 		}
+
+		//On récupère nom prénom sexe de l'adhérent connecté
 		$p='SELECT nom, prenom, sexe FROM adherent WHERE Identifiant LIKE "'.$_SESSION["slogin"].'" AND pwd LIKE "'.$_SESSION["sPwd"].'"';
 		$tab=traiterRequete($p);
 		//var_dump($tab);
+
+		//Si c'est sa première connexion, il n'a pas de nom prenom sexe donc on affiche le formulaire de bienvenue
 		if (empty($tab[1]['nom']) && empty($tab[1]['prenom']) && empty($tab[1]['sexe']) ) {
 			nouveladh();
 		}else {
+			//Sinon accueil normal
 			echo "<h2>Accueil</h2>";
 			echo "<br>";
 			formulaire_adh();	
@@ -38,7 +48,7 @@
 
 
 	function formulaire_adh() {
-
+		//Formulaire pour affiche les versions de espaceperso
 		echo '<form method="POST" action="espaceperso.php">
 				<SELECT name="nom" size="1">
 					<OPTION>course
@@ -54,6 +64,7 @@
 	}
 
 	function nouveladh() {
+		//Formulaire à remplir à la 1ère connexion
 		echo "<h2>Bienvenue !</h2>
 			<h3>Veuillez compléter les informations vous concernant</h3>
 			<form method='POST' action='espaceperso.php'>

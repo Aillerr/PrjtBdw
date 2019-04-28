@@ -1,6 +1,8 @@
 <?php
 	require_once('./includes/connexionBD.php');
 	function crses () {
+
+				//On regarde si l'utilisateur veut ajouter ou supprimer une course, et on affecte un paramètre pour effectuer la bonne requête dans req_courses
 				echo "<h2>Ajouter/Supprimer une course</h2>";
 				if (isset($_POST['send_del']) || isset($_POST['send_add'])) {
 					if (isset($_POST['send_del']) && !empty($_POST['id_del'])) {
@@ -9,14 +11,19 @@
 						$choix=1;
 					}else echo "Champ manquant";
 				}
+
+				//Formulaire de gestion des courses
 				form_courses();
 				if (isset($choix) && ($choix==1 || $choix==0 )) {
 					req_courses($choix);
 				}
 
+				//Affichage des courses
 				$p_c='SELECT * FROM course';
 				$tab=traiterRequete($p_c);
 				Array2Table($tab);
+
+				//On regarde si l'utilisateur veut ajouter ou supprimer une édition, et on affecte un paramètre pour effectuer la bonne requête dans req_courses
 				echo "<br><h2>Ajouter/Supprimer une édition de course</h2>";
 				if (isset($_POST['send_del_edt']) || isset($_POST['send_add_edt'])) {
 					if (isset($_POST['send_del_edt']) && !empty($_POST['id_del_edt'])) {
@@ -25,22 +32,29 @@
 						$choix=3;
 					}else echo "Champ manquant";
 				}
+
+				//Formulaire de gestion des éditions
 				form_edt();
 				if (isset($choix) && ($choix==2 || $choix==3)) {
 					req_courses($choix);
 				}
 				
+				//Affichage des éditions
 				$p_edt="SELECT * FROM edition";
 				$tab_edt=traiterRequete($p_edt);
 				Array2Table($tab_edt);				
 	}
 
 	function form_courses() {
+
+		//Formulaire de choix d'action
 		echo "<form method='POST' action='espaceperso.php'>
 				<input type='radio' name='action_wanted' value='add' checked > Ajouter une course<br>
 				<input type='radio' name='action_wanted' value='del'> Supprimer une course<br>
 				<input type='submit' name='send' value='Choisir'> 
 			</form>";
+
+			//Si on a choisi l'action, montre un autre formulaire en fonction de l'action choisie
 			if (isset($_POST['send'])) {
 				switch ($_POST['action_wanted']) {
 					case 'add':
@@ -66,11 +80,15 @@
 	}
 
 	function form_edt () {
+
+		//Formulaire de choix d'action
 		echo "<form method='POST' action='espaceperso.php'>
 				<input type='radio' name='action_wanted' value='add_edt' checked> Ajouter une édition<br>
 				<input type='radio' name='action_wanted' value='del_edt'> Supprimer une édition<br>
 				<input type='submit' name='send_edt' value='Choisir'> 
 			</form>";
+
+			//Si on a choisi l'action, montre un autre formulaire en fonction de l'action choisie
 			if (isset($_POST['send_edt'])) {
 				switch ($_POST['action_wanted']) {
 					case 'add_edt':
@@ -103,11 +121,15 @@
 	}
 
 	function req_courses($choix) {
+		//En fonction de ce qui a été choisi
 		switch ($choix) {
+			//Supprimer une course
 			case 0:
 				$p_courses="DELETE FROM course WHERE IdC LIKE '".$_POST['id_del']."'"; 
 				traiterRequete($p_courses);
 				break;
+
+			//Ajouter une course
 			case 1 :
 				$p_idc='SELECT MAX(IdC) FROM course';
 				$tab1=traiterRequete($p_idc);
@@ -116,6 +138,8 @@
 				;
 				traiterRequete($p_courses);
 				break;
+
+			//Ajouter une édition
 			case 3:
 				$p_ide="SELECT MAX(IdE) FROM edition";
 				$tab1=traiterRequete($p_ide);
@@ -124,6 +148,8 @@
 				
 				traiterRequete($p_courses);
 				break;
+
+			//Supprimer une édition
 			case 2:
 				$p_edt="DELETE FROM edition WHERE IdE LIKE '".$_POST['id_del_edt']."'";
 				traiterRequete($p_edt);

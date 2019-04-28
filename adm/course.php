@@ -4,19 +4,27 @@
 		$p_c='SELECT * FROM course';
 		$p_ed='SELECT * FROM edition';
 
+		//Si le formulaire de mise à jour de course a bien été rempli, on envoie la modification à la bdd
 		if (isset($_POST["modifsend"]) && !empty($_POST["nveau"]) && !empty($_POST["amodif"]) && isset($_POST['attribut'])) {
 			$p_m="UPDATE course SET ".$_POST["attribut"]." = '".$_POST["nveau"]."' WHERE IdC LIKE '".$_POST["amodif"]."'";		
 			traiterRequete($p_m);
 			echo "Changement effectué";
 		}
+
+		//Si le formulaire de mise à jour d'édition a bien été rempli, on envoie la modification à la bdd
 		if (isset($_POST['editmodifsend']) && !empty($_POST['editmodif']) && !empty($_POST['editnveau']) && isset($_POST['editattribut'])) {
 			$p_m="UPDATE edition SET ".$_POST["editattribut"]." = '".$_POST["editnveau"]."' WHERE IdE LIKE '".$_POST["editmodif"]."'";
 			traiterRequete($p_m);
 			echo "Changement effectué";	
 		}	
+
 		echo "<h2>Modifier une course</h2>";
+
+		//Affichage des courses
 		$tab=traiterRequete($p_c);
 		Array2Table($tab);
+
+		//Formulaire de modification des courses
 		echo "<form method='POST' action='espaceperso.php'>
 						<input type='text' name='amodif' placeholder='Entrez la course à modifier'/>
 						<input type='text' name='nveau' placeholder='Entrez la modification'/>
@@ -28,9 +36,13 @@
 						<input type='submit' name='modifsend' />
 					</form><br>";
 
-		echo "<h2>Modifier une édition</h2>";			
+		echo "<h2>Modifier une édition</h2>";
+
+		//Affichage des éditions
 		$tab_ed=traiterRequete($p_ed);
 		Array2Table($tab_ed);
+
+		//Formulaire de modification des éditions
 		echo "<form method='POST' action='espaceperso.php'>
 						<input type='text' name='editmodif' placeholder='Entrez l édition à modifier'/>
 						<input type='text' name='editnveau' placeholder='Entrez la modification'/>
